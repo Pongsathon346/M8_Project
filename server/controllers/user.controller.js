@@ -1,5 +1,6 @@
 const connect = require('../config/database')
-
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 exports.reg = function(req, res) {
     const username = req.body.user_name;
@@ -41,5 +42,19 @@ exports.reg = function(req, res) {
         })
     }
 };
+
+exports.login = function(req, res) {
+    if(req.user.error){
+        return res.status(400).json({
+            message: 'Invalid username or password'
+        })
+    } else {
+        const{username, id} = req.user;
+        const token = jwt.sign({username, id}, 'userAccount');
+        return res.status(200).json({id, username, token})
+    }
+};
+
+
 
 
