@@ -1,8 +1,11 @@
 const passport = require('passport')
 const BasicStrategy = require('passport-http').BasicStrategy
+const JwtStrategy = require('passport-jwt').Strategy
+const ExtractJwt = require('passport-jwt').ExtractJwt
 const FacebookStrategy = require('passport-facebook').Strategy;
 const bcrypt = require('bcrypt')
 const connect = require('../config/database')
+
 
 module.exports = () => {
     passport.use(new BasicStrategy((username, password, done) => {
@@ -29,12 +32,30 @@ module.exports = () => {
     }));
 
     passport.use(new FacebookStrategy({
-        clientID: 976194982932030,
-        clientSecret: 'ff28853d33d1801edc3a6eefcdb35ea0',
-        callbackURL: "http://localhost:3000/auth/facebook/callback"
+        clientID: "597030604753073",
+        clientSecret: "59c05e2dee7f790458d69a8cd8eaebf3",
+        callbackURL: "http://localhost:5000/api/auth/facebook/callback",
+        profileFields: ['id', 'displayName', 'name', 'email'],
+        passReqToCallback: true,
       },
-      function(accessToken, refreshToken, profile, done) {
-        
+      function(req, accessToken, refreshToken, profile, done) {
+        try {
+            if (profile) {
+                req.user = profile
+                done(null, profile)
+            }
+        } catch (error) {
+            done(error)
+        }
       }
-    ));
+    )
+);
+
+    // passport.use(new JwtStrategy({
+    //     jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(),
+    //     secretOrKey = 'secret'
+    // }, (payload, done) => {
+
+    // }));
+
 }

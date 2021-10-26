@@ -7,7 +7,7 @@ import Loginpage from './Pages/Loginpage'
 function App() {
   return(
     <Switch>
-      <Route path="/Home">
+      <Route path="/home">
         <Homepage />
       </Route>
       <Route path="/">

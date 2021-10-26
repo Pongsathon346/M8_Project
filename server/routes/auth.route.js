@@ -1,8 +1,20 @@
 const route = require('express').Router()
 const passport = require('passport')
+const user = require('../controllers/user.controller')
 
-route.get('/facebook',passport.authenticate('facebook'))
+// route.post('/facebook', user.facebook)
 
-route.get('/auth/facebook/callback', passport.authenticate('facebook',{session: false}));
+route.get('/facebook', passport.authenticate('facebook'))
+
+route.get('/facebook/callback',
+    passport.authenticate('facebook', { 
+        session: false,
+        failureRedirect: 'http://localhost:3000' 
+    }), user.loginFacebook
+    
+    
+)
+
+// route.get('/facebook/callback', passport.authenticate('facebook',{session: false}));
 
 module.exports = route
