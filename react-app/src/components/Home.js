@@ -16,7 +16,7 @@ function Home({className}) {
                 setMusic(res.data.data)             
             })
         }else {
-            axios.get('https://api.lyrics.ovh/suggest/wave').then((res) => {
+            axios.get('https://api.lyrics.ovh/suggest/selena').then((res) => {
                 setMusic(res.data.data)       
             })
         }
@@ -31,7 +31,7 @@ function Home({className}) {
         <div className={className}>
             <div className="container1">
                <div className="container-box">
-                    <label>Search</label>
+                    <label className="search">Search</label>
                     <div>
                         <input type="text" placeholder="  Search Artist or Song" name="searchBox" onChange={(event)=> setInput(event.target.value)}></input>
                     </div>
@@ -69,7 +69,7 @@ function Home({className}) {
                                             </Row>
                                             </div>
                                             <Row>
-                                                <Link to={`/lyric/${item.id}`}><button className="lyric">Lyric</button></Link>
+                                                <Link to={`/lyric/${item.artist.name}&${item.title}`}><button className="lyric">Get Lyric</button></Link>
                                             </Row>
                                             
                                         </Col>
@@ -86,20 +86,25 @@ function Home({className}) {
 }
 
 export default styled(Home)`
-    
+    background-color:#efefef;
     .container1 {
         width:100%;
         display:flex;
         justify-content:center;
-        margin:4rem 0;
+        padding-top: 3rem;
+        padding-bottom: 4rem;
     }
     .container-box {
         text-align:center;
         width:100%;
     }
     .container-box label {
-        font-size:42px;
+        color:#010334;
+        font-size:56px;
         margin-bottom:10px;
+        font-family:Fat-Frank, Arial, sans-serif;
+        font-weight:700;
+
     }
     .container-box input[type=text] {
         width:50%;
@@ -121,14 +126,15 @@ export default styled(Home)`
     .head{
         font-size:18px;
         font-weight:600;
-        margin-bottom:10px;
+        margin-bottom:5px;
     }
     .text{
         font-weight:100;
         font-size:16px;
     }
     .lyric{
-        width:50%;
+        border-radius:12px;
+        width:100px;
     }
     .card-detail {
         height:170px;
