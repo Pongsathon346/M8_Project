@@ -12,7 +12,6 @@ route.get('/facebook/callback',
         failureRedirect: 'http://localhost:3000' 
     }), user.loginFacebook
     
-    
 )
 
 // route.get('/facebook/callback', passport.authenticate('facebook',{session: false}));

@@ -1,86 +1,128 @@
 import styled from 'styled-components'
-import {Row, Col, Container} from 'react-bootstrap'
+import { useState } from 'react'
+import { useHistory } from 'react-router'
+import axios from 'axios'
+import Swal from 'sweetalert2';
 
 function LoginForm({className}) {
-    // const signUserIn = async response => {
-    //     console.log('Res -->', response)
-    //     const { name, email, accessToken, userID } = response
-    //     const user = { name, email, accessToken, userId: userID }
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const history = useHistory()
     
-    //     await axios({
-    //       method: 'post',
-    //       url: 'http://localhost:5000/api/auth/facebook',
-    //       data: {
-    //         user
-    //       }
-    //     })
-    //   }
+    function onClick(e) {
+        e.preventDefault();
+        axios.post('http://localhost:5000/api/routes/login', {}, {
+        auth: {
+            username: username,
+            password: password
+        }
+        }).then((res) => {
+            localStorage.setItem('user', JSON.stringify(res.data));
+            history.push('/Home');
+        }).catch((err) => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Invalid username'
+            })
+        });
+    }
 
-      
     return(
         <div className={className}>
-            <Container fluid>
-            <div className="bigbox">
-                <Col className="right-box">
-                    <Row className="box">
-                        <label>Login to Mlyric</label>
-                        <Row className="input-box">
-                            <input type="text" name="user" placeholder="username"></input>
-                            <input type="password" name="pass" placeholder="password"></input>
-                        </Row>
-                        <Row className="sign">
-                            <button className="button" type="submit" value="submit">Sign in</button>
-                        </Row>
-                    </Row>
-                </Col>
+
+        <div className="content">
+            <div className="content2">
+            <div className="wel">
+                <label for="fname"> Welcome To MLyric</label>
             </div>
-            </Container>
+            <form >
+                <input type="text" id="fname"  placeholder="Username" value={username} onChange={(event) => { setUsername(event.target.value)}} />
+                <input type="password" id="fname"  placeholder="Password" value={password} onChange={(event) => { setPassword(event.target.value)}} />
+                <input type="submit" value="Sign in" onClick={onClick} />
+                <a href="http://localhost:5000/api/auth/facebook" style={{color:'white'}}>Login with facebook</a>
+            </form>
+            </div>
+        </div>
         </div>
     )
 }
 
 export default styled(LoginForm)`
-
+.content {
+  display:flex;
+  justify-content:center;
+  position: fixed;
   
-  
+  height:100%;
+  width: 100%;
+}
 
-    .bigbox{
-        
-        height:422px;
-        width:350px;
-        background-color: #f7f7f7;
-        
-    }
-    .box {
-       display:flex;
-       justify-content:center;
-    }
+.content2 {
+  text-align:center;
+  position: fixed;
+  width: 30%;
+  bottom:40%;
+}
 
-    label {
-        text-align:center;
-        font-size:30px
-    }
-    .input-box {
-        display:flex;
-       justify-content:center;
-    }
+.wel{
+    font-size:50px;
+    margin-bottom:20px;
+    font-weight:500;
+    color:blueviolet;
+}
 
-    input[type=text]{
-        width:300px;
-        height:44px;
-    }
+.form{
+    background: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+}
 
-    input[type=password]{
-        width:300px;
-        height:44px;
-    }
-    .sign {
-        display:flex;
-       justify-content:center;
-    }
+///////////
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 
-    .button{
-        width:300px;
-        height:45px;
-    }
+input[type=password], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color:black;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: blueviolet;
+    transition:0.3s ease-in-out;
+}
+
+a{  
+    background-color: #3d5d8e;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-decoration:none;
+}
 `

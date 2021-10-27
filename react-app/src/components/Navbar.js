@@ -4,7 +4,7 @@ function Navbar ({className}) {
     return(
         <div className={className}>
             <div className="nav-box">
-                <h1>MLyrics</h1>
+                <label>MLyrics</label>
                 <div className="nav-box-right">
                     <a href="#">Favorite</a>
                     <label>Username</label>
@@ -16,13 +16,15 @@ function Navbar ({className}) {
 }
 
 export default styled(Navbar)`
-    background-color: #f4f4f8;
+    background-color: black;
     .nav-box{
         display: flex;
         justify-content: space-between;
+        color: blueviolet;
     }
-    .nav-box h1{
-        margin-left: 2rem;
+    .nav-box label{
+        font-size:50px;
+        font-weight:500;
     }
     .nav-box-right{
         margin-top: 2rem;
