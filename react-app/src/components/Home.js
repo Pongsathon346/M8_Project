@@ -3,13 +3,15 @@ import axios from 'axios'
 import styled from "styled-components"
 import {Row, Col} from 'react-bootstrap'
 import { Link } from "react-router-dom"
+import {useHistory} from 'react-router'
 
 
 function Home({className}) {
     const [input, setInput] = useState('')
     const [search, setSearch] = useState('')
     const [music, setMusic] = useState([])
-    
+    const history = useHistory()
+
     useEffect(()=> {
         if(search){
             axios.get(`https://api.lyrics.ovh/suggest/${input}`).then((res) => {
@@ -23,20 +25,28 @@ function Home({className}) {
         console.log(music);
     },[search])
 
-    function submit(){
+    function submit() {
         setSearch(input)
+    }
+
+    let id;
+    let users = JSON.parse(localStorage.getItem('user'));
+    if(users === null){
+        history.push('/')
+    }else{
+       id = users.id
     }
 
     return(
         <div className={className}>
             <div className="container1">
                <div className="container-box">
-                    <label className="search">Search</label>
+                    <label className="search">Looking for song lyrics</label>
                     <div>
-                        <input type="text" placeholder="  Search Artist or Song" name="searchBox" onChange={(event)=> setInput(event.target.value)}></input>
+                        <input type="text" placeholder="   Search Artist or Song . . . ." name="searchBox" onChange={(event)=> setInput(event.target.value)}></input>
                     </div>
                     <div>
-                        <button type="submit" value="submit" onClick={submit}>Find</button>
+                        <button type="submit" value="submit" onClick={submit}>search</button>
                     </div>
                </div>
             </div>
@@ -46,6 +56,19 @@ function Home({className}) {
                 <Col md={9} centered className="container2-box">
                     <Row>
                         {music.map((item) => {
+                            function sendFav() {
+                                axios.post('http://localhost:5000/api/routes/addFav',{
+                                    id: id,
+                                    name: item.title,
+                                    album: item.album.title,
+                                    artist: item.artist.name,
+                                    preview: item.preview
+                                }).then((res) =>{
+                                    alert(res.data.message)  
+                                }).catch((err) =>{
+                                    alert(err.response.data.message)
+                                })
+                            }
                             return(
                                 <Col md={6} key={item.id} className="box">
                                     <Row>
@@ -53,25 +76,30 @@ function Home({className}) {
                                             <img src={item.album.cover_medium}></img>
                                         </Col>
                                         <Col>
-                                            <div className="card-detail">
-                                            <Row>                      
-                                                <span className="head">Song : <span className="text">{item.title}</span></span>
-                                            </Row>
-                                            <Row>
-                                                <span className="head">Album : <span className="text">{item.album.title}</span></span>
-                                                
-                                            </Row>
-                                            <Row>
-                                                <span className="head">Artist: <span className="text">{item.artist.name}</span></span> 
-                                            </Row>
-                                            <Row>
-                                                <span className="head">Preview : <a className="text" href={item.preview}>Listen!</a> </span>
-                                            </Row>
+                                            <div className="">
+                                                <div className="card-detail">
+                                                <Row>                      
+                                                    <span className="head">Song : <span className="text">{item.title}</span></span>
+                                                </Row>
+                                                <Row>
+                                                    <span className="head">Album : <span className="text">{item.album.title}</span></span>
+                                                    
+                                                </Row>
+                                                <Row>
+                                                    <span className="head">Artist: <span className="text">{item.artist.name}</span></span> 
+                                                </Row>
+                                                <Row>
+                                                    <span className="head">Preview : <a className="text" href={item.preview}>Listen!</a> </span>
+                                                </Row>
+                                                </div>
+                                                <Row>
+                                                    
+                                                </Row>
+                                                <Row>
+                                                    <button className="fav" onClick={sendFav}>add</button>
+                                                    <Link to={`/lyric/${item.artist.name}&${item.title}`}><button className="lyric">Get Lyric</button></Link>
+                                                </Row>
                                             </div>
-                                            <Row>
-                                                <Link to={`/lyric/${item.artist.name}&${item.title}`}><button className="lyric">Get Lyric</button></Link>
-                                            </Row>
-                                            
                                         </Col>
                                     </Row>
                                 </Col>
@@ -135,6 +163,11 @@ export default styled(Home)`
     .lyric{
         border-radius:12px;
         width:100px;
+    }
+    .fav{
+        border-radius:12px;
+        width:100px;
+        margin-left:12px;
     }
     .card-detail {
         height:170px;

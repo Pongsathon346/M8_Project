@@ -14,7 +14,7 @@ exports.reg = function(req, res) {
         })
     }else{
         const sqlCheck = "SELECT * FROM user WHERE user_name = ? OR user_email = ? LIMIT 1";
-        connect.query(sqlCheck,[username, email], (err, result) => {
+        database.query(sqlCheck,[username, email], (err, result) => {
             if(err) throw err
 
             if (result.length == 1) {
@@ -33,7 +33,7 @@ exports.reg = function(req, res) {
                 const hash = bcrypt.hashSync(password, salt);
 
                 const sql = "INSERT INTO user (user_name, user_password, user_email) VALUES (?, ?, ?)"
-                connect.query(sql,[username, hash, email], (err, result) => {
+                database.query(sql,[username, hash, email], (err, result) => {
                     if(err) throw err
 
                     return res.status(200).json({

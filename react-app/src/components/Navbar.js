@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 import {useHistory} from 'react-router'
+import { Link } from 'react-router-dom'
+
+
 
 function Navbar ({className}) {
     const history = useHistory()
@@ -11,14 +14,19 @@ function Navbar ({className}) {
        name = users.username
     }
 
+    function logout() {
+        localStorage.clear()
+        history.push('/')
+    }
+
     return(
         <div className={className}>
             <div className="nav-box">
                 <label className="logo">MLyrics</label>
                 <div className="nav-box-right">
-                    <a href="#">Favorite</a>
                     <label className="username">{name}</label>
-                    <a href="#">Logout</a>
+                    <Link to="/fav">Favorite</Link>
+                    <button onClick={logout}>Logout</button>
                 </div>
             </div>
         </div>
@@ -44,10 +52,11 @@ export default styled(Navbar)`
         margin-top: 2rem;
         margin-right: 2rem;
     }
-    .nav-box-right a{
+    .nav-box-right button{
         margin: 0 2rem;
     }
     .username{
         color:black;
+        margin-right:10px;
     }
 `;
