@@ -6,28 +6,32 @@ import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'
 
 
-function LoginForm({className}) {
+function RegForm({className}) {
     const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [password2, setPassword2] = useState('')
     const history = useHistory()
-    
-    function onClick(e) {
-        e.preventDefault();
-        axios.post('http://localhost:5000/api/routes/login', {}, {
-        auth: {
-            username: username,
-            password: password
-        }
+
+    function regSend() {
+        if(!username){
+          alert('Please fill username!')
+        }else if(password !== password2){
+          alert('Password did not match!')
+        }else if(!email){
+          alert('Please fill email!')
+        }else {
+        axios.post('http://localhost:5000/api/routes/reg', {
+          username: username,
+          password: password,
+          email: email
         }).then((res) => {
-            localStorage.setItem('user', JSON.stringify(res.data));
-            history.push('/Home');
+          alert(res.data.message)
+          history.push('/')
         }).catch((err) => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Invalid username'
-            })
-        });
+          alert(err.response.data.message)
+        })
+      }
     }
 
     return(
@@ -35,15 +39,16 @@ function LoginForm({className}) {
             <div className="content">
                 <div className="content2">
                 <div className="wel">
-                    <label for="fname"> Sign In</label>
+                    <label for="fname">Sign Up</label>
                 </div>
                 <form >
                     <input type="text" id="fname"  placeholder="Username" value={username} onChange={(event) => { setUsername(event.target.value)}} />
+                    <input type="text" id="fname"  placeholder="Email" value={email} onChange={(event) => { setEmail(event.target.value)}} />
                     <input type="password" id="fname"  placeholder="Password" value={password} onChange={(event) => { setPassword(event.target.value)}} />
-                    <input type="submit" value="Sign in" onClick={onClick} />
-                    <a href="http://localhost:5000/api/auth/facebook" style={{color:'white'}} className="facebook">Login with facebook</a>
-                    <span>Don't have an account yet? </span>
-                    <Link to='/reg'>Sign Up</Link>
+                    <input type="password" id="fname"  placeholder="Re-Password" value={password2} onChange={(event) => { setPassword2(event.target.value)}} />
+                    <input type="submit" value="Sign Up" onClick={regSend} />
+                    <span>Already logged in? </span>
+                    <Link to='/'>Sign In</Link>
                 </form>
                 </div>
             </div>
@@ -51,13 +56,13 @@ function LoginForm({className}) {
     )
 }
 
-export default styled(LoginForm)`
-.content {
+export default styled(RegForm)`
+    .content {
   display:flex;
   justify-content:center;
   position: fixed;
   
-  height:100%;
+  height:80%;
   width: 100%;
 }
 
@@ -65,7 +70,7 @@ export default styled(LoginForm)`
   text-align:center;
   position: fixed;
   width: 30%;
-  bottom:40%;
+  bottom:30%;
 }
 
 .wel{
@@ -115,18 +120,6 @@ input[type=submit] {
 input[type=submit]:hover {
     background-color: blueviolet;
     transition:0.3s ease-in-out;
-}
-
-.facebook{  
-    background-color: #3d5d8e;
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid black;
-    border-radius: 4px;
-    box-sizing: border-box;
-    text-decoration:none;
 }
 
 `

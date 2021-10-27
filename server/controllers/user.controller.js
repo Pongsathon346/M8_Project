@@ -5,9 +5,9 @@ const axios = require('axios')
 const database = require('../config/database')
 
 exports.reg = function(req, res) {
-    const username = req.body.user_name;
-    const email = req.body.user_email;
-    const password = req.body.user_password;
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
     if(!username || !password || !email){
         return res.status(400).json({
             message: 'Please fill data!'
@@ -18,7 +18,7 @@ exports.reg = function(req, res) {
             if(err) throw err
 
             if (result.length == 1) {
-                if(result[0].username === username){
+                if(result[0].user_name === username){
                     return res.status(400).json({
                         message: 'Username is already used'
                     })

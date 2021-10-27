@@ -55,14 +55,14 @@ function Home({className}) {
                                         <Col>
                                             <div className="card-detail">
                                             <Row>                      
-                                                <span className="head">Artist: <span className="text">{item.artist.name}</span></span> 
+                                                <span className="head">Song : <span className="text">{item.title}</span></span>
                                             </Row>
                                             <Row>
                                                 <span className="head">Album : <span className="text">{item.album.title}</span></span>
                                                 
                                             </Row>
                                             <Row>
-                                                <span className="head">Song : <span className="text">{item.title}</span></span>
+                                                <span className="head">Artist: <span className="text">{item.artist.name}</span></span> 
                                             </Row>
                                             <Row>
                                                 <span className="head">Preview : <a className="text" href={item.preview}>Listen!</a> </span>
