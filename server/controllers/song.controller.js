@@ -38,7 +38,11 @@ exports.getFav = function(req,res) {
         if(err){
             throw err
         }else {
-            return res.status(200).json(result)
+            if(result.length == 0){
+                return res.status(400).json({message:"No favorite song!"})
+            }else {
+                return res.status(200).json(result)
+            }
         }
     })
 }

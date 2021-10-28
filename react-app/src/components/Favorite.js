@@ -3,7 +3,8 @@ import { useHistory } from 'react-router';
 import { useState, useEffect } from "react"
 import {Row, Col} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components';
+import styled from 'styled-components'
+import Swal from 'sweetalert2';
 
 
 function Favorite({className}) {
@@ -20,33 +21,62 @@ function Favorite({className}) {
 
     useEffect(async () => {
         await axios.get(`http://localhost:5000/api/routes/getFav/${id}`).then((res) => {
-            if(!res.data){
-                alert('No favorite song!')
-            }else {
                 setSong(res.data)
-            }
-       })
+            }).catch((err)=> {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `${err.response.data.message}`,
+                  })
+                history.push('/home')
+            })
     }, [])
 
     return(
         <div className={className}>
+            <div className="topic">
+                Favorite
+            </div>
             <div className="container2">
-            <Row>
+            <Row className="rowtest">
                 <Col md={2}></Col>   
                 <Col md={9} centered className="container2-box">
                     <Row>
                         {song.map((item) =>{
-                            function sendDelete(){
-                                axios.delete(`http://localhost:5000/api/routes/deleteFav/${item.id}/${item.user_id}`).then((res) => {
-                                    alert(res.data.message)
-                                    window.location.reload(true)
-                                })
+                            function sendDelete(e){
+                                e.preventDefault()
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "You won't be able to revert this!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, delete it!'
+                                  }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        axios.delete(`http://localhost:5000/api/routes/deleteFav/${item.id}/${item.user_id}`).then((res) => {
+                                        Swal.fire(
+                                            'Deleted!',
+                                            'Your file has been deleted.',
+                                            'success',
+                                            window.location.reload(true)
+                                        )                                              
+                                    }).catch((err)=> {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: 'Something went wrong!',
+                                        })
+                                    })
+                                    }
+                                  }) 
                             }
                             return(
                                 <Col md={6} key={item.id} className="box">
                                     <Row>
                                         <Col>
-                                            <img src={item.image}></img>
+                                        <Link to={`/lyric/${item.song_artist}&${item.song_name}`}><img src={item.image}></img></Link>
                                         </Col>
                                         <Col>
                                             <div className="">
@@ -83,7 +113,7 @@ function Favorite({className}) {
 }
 
 export default styled(Favorite)`
-     background-color:#efefef;
+     
     .container1 {
         width:100%;
         display:flex;
@@ -133,12 +163,34 @@ export default styled(Favorite)`
         border-radius:12px;
         width:100px;
     }
+
     .delete{
+        margin-bottom:10px;
         border-radius:12px;
         width:100px;
         margin-left:12px;
+        border:none;
+        background-color:#b31b1b;
+        transition: .2s ease-in;
     }
+
+    .delete:hover{
+        background-color:black;
+        color:red;
+    }
+
     .card-detail {
         height:170px;
+    }
+
+    .topic {
+        font-size:30px;
+        margin-left:10%;
+        margin-bottom:25px;
+        padding-top:20px;
+    }
+    
+    .rowtest{
+        width:100%
     }
 `

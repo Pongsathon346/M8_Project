@@ -4,6 +4,7 @@ import styled from "styled-components"
 import {Row, Col} from 'react-bootstrap'
 import { Link } from "react-router-dom"
 import {useHistory} from 'react-router'
+import Swal from 'sweetalert2';
 
 
 function Home({className}) {
@@ -18,7 +19,7 @@ function Home({className}) {
                 setMusic(res.data.data)             
             })
         }else {
-            axios.get('https://api.lyrics.ovh/suggest/selena').then((res) => {
+            axios.get('https://api.lyrics.ovh/suggest/ed').then((res) => {
                 setMusic(res.data.data)       
             })
         }
@@ -51,12 +52,13 @@ function Home({className}) {
                </div>
             </div>
             <div className="container2">
-                <Row>
+                <Row className="rowtest">
                 <Col md={2}></Col>   
-                <Col md={9} centered className="container2-box">
+                <Col md={9} className="container2-box">
                     <Row>
                         {music.map((item) => {
-                            function sendFav() {
+                            function sendFav(e) {
+                                e.preventDefault()
                                 axios.post('http://localhost:5000/api/routes/addFav',{
                                     id: id,
                                     image: item.album.cover_medium,
@@ -64,17 +66,25 @@ function Home({className}) {
                                     album: item.album.title,
                                     artist: item.artist.name,
                                     preview: item.preview
-                                }).then((res) =>{
-                                    alert(res.data.message)  
+                                }).then((res) =>{ 
+                                    Swal.fire(
+                                        'Success!',
+                                        `${res.data.message}`,
+                                        'success'
+                                      )
                                 }).catch((err) =>{
-                                    alert(err.response.data.message)
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: `${err.response.data.message}`,
+                                      })
                                 })
                             }
                             return(
                                 <Col md={6} key={item.id} className="box">
                                     <Row>
                                         <Col>
-                                            <img src={item.album.cover_medium}></img>
+                                        <Link to={`/lyric/${item.artist.name}&${item.title}`}><img src={item.album.cover_medium}></img></Link>
                                         </Col>
                                         <Col>
                                             <div className="">
@@ -97,7 +107,7 @@ function Home({className}) {
                                                     
                                                 </Row>
                                                 <Row>
-                                                    <button className="fav" onClick={sendFav}>add</button>
+                                                    <button className="fav"  onClick={sendFav}>Add</button>
                                                     <Link to={`/lyric/${item.artist.name}&${item.title}`}><button className="lyric">Get Lyric</button></Link>
                                                 </Row>
                                             </div>
@@ -115,7 +125,7 @@ function Home({className}) {
 }
 
 export default styled(Home)`
-    background-color:#efefef;
+    
     .container1 {
         width:100%;
         display:flex;
@@ -146,7 +156,14 @@ export default styled(Home)`
         width: 10%;
         height: 2.5rem;
         color:white;
+        border-radius: 20px;
         background-color:black;
+        transition: .2s ease-in;
+    }
+
+    .container-box button:hover {
+       background-color: lightgray;
+       color:black;
     }
 
     .box {
@@ -164,13 +181,35 @@ export default styled(Home)`
     .lyric{
         border-radius:12px;
         width:100px;
+        border:none;
+        background-color:lightseagreen;
+        transition: .2s ease-in;
     }
+    
+    .lyric:hover{
+        background-color:black;
+        color:lightseagreen;
+    }
+
     .fav{
+        margin-bottom:10px;
         border-radius:12px;
         width:100px;
         margin-left:12px;
+        border:none;
+        background-color:rosybrown;
+        transition: .2s ease-in;
     }
+
+    .fav:hover{
+        background-color:black;
+        color:rosybrown;
+    }
+
     .card-detail {
-        height:170px;
+        height:150px;
+    }
+    .rowtest{
+        width:100%
     }
 `

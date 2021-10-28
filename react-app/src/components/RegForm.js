@@ -13,25 +13,39 @@ function RegForm({className}) {
     const [password2, setPassword2] = useState('')
     const history = useHistory()
 
-    function regSend() {
-        if(!username){
-          alert('Please fill username!')
-        }else if(password !== password2){
-          alert('Password did not match!')
-        }else if(!email){
-          alert('Please fill email!')
+    function regSend(e) {
+        e.preventDefault();
+        if(password2 !== password){
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Password did not match!',
+            footer: '<a href="">Why do I have this issue?</a>'
+          })
         }else {
-        axios.post('http://localhost:5000/api/routes/reg', {
+          axios.post('http://localhost:5000/api/routes/reg', {
           username: username,
           password: password,
           email: email
         }).then((res) => {
           alert(res.data.message)
+          Swal.fire(
+            `${res.data.message}`,
+            'You clicked the button!',
+            'success'
+          )
           history.push('/')
         }).catch((err) => {
-          alert(err.response.data.message)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `${err.response.data.message}`,
+            footer: '<a href="">Why do I have this issue?</a>'
+          })
         })
-      }
+        }
+       
+      
     }
 
     return(
