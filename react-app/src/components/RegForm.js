@@ -39,7 +39,7 @@ function RegForm({className}) {
             <div className="content">
                 <div className="content2">
                 <div className="wel">
-                    <label for="fname">Sign Up</label>
+                    <label for="fname">Sign Up - Mlyric</label>
                 </div>
                 <form >
                     <input type="text" id="fname"  placeholder="Username" value={username} onChange={(event) => { setUsername(event.target.value)}} />
@@ -57,7 +57,7 @@ function RegForm({className}) {
 }
 
 export default styled(RegForm)`
-    .content {
+.content {
   display:flex;
   justify-content:center;
   position: fixed;
@@ -70,14 +70,14 @@ export default styled(RegForm)`
   text-align:center;
   position: fixed;
   width: 30%;
-  bottom:30%;
+  bottom:34%;
 }
 
 .wel{
     font-size:50px;
     margin-bottom:20px;
     font-weight:500;
-    color:blueviolet;
+    color:#010334;
 }
 
 .form{
@@ -118,7 +118,7 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-    background-color: blueviolet;
+    background-color: #010334;
     transition:0.3s ease-in-out;
 }
 

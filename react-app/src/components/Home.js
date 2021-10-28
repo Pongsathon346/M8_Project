@@ -59,6 +59,7 @@ function Home({className}) {
                             function sendFav() {
                                 axios.post('http://localhost:5000/api/routes/addFav',{
                                     id: id,
+                                    image: item.album.cover_medium,
                                     name: item.title,
                                     album: item.album.title,
                                     artist: item.artist.name,

@@ -25,7 +25,7 @@ function Navbar ({className}) {
                 <label className="logo">MLyrics</label>
                 <div className="nav-box-right">
                     <label className="username">{name}</label>
-                    <Link to="/fav">Favorite</Link>
+                    <Link to="/fav" style={{textDecoration:'none'}}>Favorite</Link>
                     <button onClick={logout}>Logout</button>
                 </div>
             </div>
@@ -34,12 +34,12 @@ function Navbar ({className}) {
 }
 
 export default styled(Navbar)`
-    
     .nav-box{
         display: flex;
         justify-content: space-between;
         color: white;
         height: 5.5rem;
+        
     }
     .nav-box .logo {
         color:black;

@@ -57,24 +57,25 @@ exports.login = function(req, res) {
     }
 };
 
-//   exports.facebook  = async (req, res) => {
-//     console.log('Request -->', req.body.user)
-//     const accessToken = req.body.user.accessToken
+  exports.facebook  = async (req, res) => {
+    console.log('Request -->', req.body.user)
+    const accessToken = req.body.user.accessToken
 
-//     try {
-//         const response = await axios.get(`https://graph.facebook.com/v6.0/oauth/access_token?grant_type=fb_exchange_token&client_id=597030604753073&client_secret=59c05e2dee7f790458d69a8cd8eaebf3&fb_exchange_token=${accessToken}`)
+    try {
+        const response = await axios.get(`https://graph.facebook.com/v6.0/oauth/access_token?grant_type=fb_exchange_token&client_id=597030604753073&client_secret=59c05e2dee7f790458d69a8cd8eaebf3&fb_exchange_token=${accessToken}`)
 
-//         const result = response.data
-//         console.log('Result -->', result)
+        const result = response.data
+        console.log('Result -->', result)
         
-//         // If (result) --> process signup (new user) / signin (exiting user)
-//       } catch (error) {}
-// }
+        // If (result) --> process signup (new user) / signin (exiting user)
+      } catch (error) {}
+}
 
 exports.loginFacebook = function(req, res) {
         console.log('User =', req.user);
         const{username, id} = req.user;
         const token = jwt.sign({username, id}, 'userAccount');
+        
         res.redirect('http://localhost:3000/home')
         // return res.status(200).json({token, username, id})     
         

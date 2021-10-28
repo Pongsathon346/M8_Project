@@ -30,12 +30,19 @@ function LoginForm({className}) {
         });
     }
 
+    let users = JSON.parse(localStorage.getItem('user'));
+    if(users === null){
+        history.push('/')
+    }else{
+        history.push('/home')
+    }
+
     return(
         <div className={className}>
             <div className="content">
                 <div className="content2">
                 <div className="wel">
-                    <label for="fname"> Sign In</label>
+                    <label for="fname">Sign In to Mlyric</label>
                 </div>
                 <form >
                     <input type="text" id="fname"  placeholder="Username" value={username} onChange={(event) => { setUsername(event.target.value)}} />
@@ -72,7 +79,7 @@ export default styled(LoginForm)`
     font-size:50px;
     margin-bottom:20px;
     font-weight:500;
-    color:blueviolet;
+    color: #010334;
 }
 
 .form{
@@ -113,7 +120,7 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-    background-color: blueviolet;
+    background-color: #010334;
     transition:0.3s ease-in-out;
 }
 
