@@ -44,7 +44,7 @@ function Home({className}) {
                <div className="container-box">
                     <label className="search">Looking for song lyrics</label>
                     <div>
-                        <input type="text" placeholder="   Search Artist or Song . . . ." name="searchBox" onChange={(event)=> setInput(event.target.value)}></input>
+                        <input type="text" placeholder="Search Artist or Song . . . ." name="searchBox" onChange={(event)=> setInput(event.target.value)}></input>
                     </div>
                     <div>
                         <button type="submit" value="submit" onClick={submit}>search</button>
@@ -100,7 +100,7 @@ function Home({className}) {
                                                     <span className="head">Artist: <span className="text">{item.artist.name}</span></span> 
                                                 </Row>
                                                 <Row>
-                                                    <span className="head">Preview : <a className="text" href={item.preview}>Listen!</a> </span>
+                                                    <span className="head">Preview : <a className="text" href={item.preview} style={{textDecoration:'none'}}>Listen!</a> </span>
                                                 </Row>
                                                 </div>
                                                 <Row>

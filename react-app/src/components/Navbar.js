@@ -78,15 +78,16 @@ export default styled(Navbar)`
     }
     .logout{
         font-weight:500;
-        background-color:#b31b1b;
-        color: black;
+        
         border-radius:20px;
         transition: .2s ease-in;
+        background-color:black;
+        color: red;
     }
 
     .logout:hover{
-        background-color:black;
-        color: red;
+        background-color:#b31b1b;
+        color: black;
     }
     .fav{
         font-size:18px;

@@ -7,7 +7,9 @@ const bcrypt = require('bcrypt')
 const connect = require('../config/database')
 
 
+
 module.exports = () => {
+
     passport.use(new BasicStrategy((username, password, done) => {
         const sql = "SELECT * FROM user WHERE user_name = ? LIMIT 1"
         connect.query(sql, [username], (err, result) => {
@@ -31,31 +33,31 @@ module.exports = () => {
         })
     }));
 
-    passport.use(new FacebookStrategy({
-        clientID: "597030604753073",
-        clientSecret: "59c05e2dee7f790458d69a8cd8eaebf3",
-        callbackURL: "http://localhost:5000/api/auth/facebook/callback",
-        profileFields: ['id', 'displayName', 'name', 'email'],
-        passReqToCallback: true,
-      },
-      function(req, accessToken, refreshToken, profile, done) {
-        try {
-            if (profile) {
-                req.user = profile
-                done(null, profile)
-            }
-        } catch (error) {
-            done(error)
-        }
-      }
-    )
-);
+//     passport.use(new FacebookStrategy({
+//         clientID: "597030604753073",
+//         clientSecret: "59c05e2dee7f790458d69a8cd8eaebf3",
+//         callbackURL: "http://localhost:5000/api/auth/facebook/callback",
+//         profileFields: ['id', 'displayName', 'name', 'email'],
+//         passReqToCallback: true,
+//       },
+//       function(req, accessToken, refreshToken, profile, done) {
+//         try {
+//             if (profile) {
+//                 req.user = profile
+//                 done(null, profile)
+//             }
+//         } catch (error) {
+//             done(error)
+//         }
+//       }
+//     )
+// );
 
-    // passport.use(new JwtStrategy({
-    //     jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(),
-    //     secretOrKey = 'secret'
-    // }, (payload, done) => {
+// passport.use(new JwtStrategy({
+//     jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(),
+//     secretOrKey = 'userAccount',
+// }, (payload, done) => {
 
-    // }));
+// }));
 
 }

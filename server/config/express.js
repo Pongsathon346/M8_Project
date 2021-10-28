@@ -9,6 +9,7 @@ module.exports = () => {
     app.use(express.urlencoded({extended: false}))
     app.use(cors())
     passport()
+    
     app.use('/api', test)
     
     const listen = (port) => {

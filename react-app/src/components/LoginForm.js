@@ -4,6 +4,7 @@ import { useHistory } from 'react-router'
 import axios from 'axios'
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'
+import FacebookLogin from 'react-facebook-login'
 
 
 function LoginForm({className}) {
@@ -19,8 +20,8 @@ function LoginForm({className}) {
             password: password
         }
         }).then((res) => {
-            localStorage.setItem('user', JSON.stringify(res.data));
-            history.push('/Home');
+            localStorage.setItem('user', JSON.stringify(res.data))
+            history.push('/Home')
         }).catch((err) => {
             Swal.fire({
                 icon: 'error',
@@ -37,6 +38,23 @@ function LoginForm({className}) {
         history.push('/home')
     }
 
+    const signUserIn = async response => {
+        console.log('Res -->', response)
+        const { name, email, accessToken, userID } = response
+        const user = { name, email, accessToken, userId: userID }
+    
+        const res = await axios({
+          method: 'post',
+          url: 'http://localhost:5000/api/auth/signin/facebook',
+          data: {
+            user
+          }
+        })
+        await console.log(res.data);
+        await localStorage.setItem('user', JSON.stringify(res.data))
+        await history.push('/home')
+      }
+
     return(
         <div className={className}>
             <div className="content">
@@ -48,9 +66,16 @@ function LoginForm({className}) {
                     <input type="text" id="fname"  placeholder="Username" value={username} onChange={(event) => { setUsername(event.target.value)}} />
                     <input type="password" id="fname"  placeholder="Password" value={password} onChange={(event) => { setPassword(event.target.value)}} />
                     <input type="submit" value="Sign in" onClick={onClick} />
-                    <a href="http://localhost:5000/api/auth/facebook" style={{color:'white'}} className="facebook">Login with facebook</a>
-                    <span>Don't have an account yet? </span>
-                    <Link to='/reg'>Sign Up</Link>
+                    {/* <a href="http://localhost:5000/api/auth/facebook" style={{color:'white'}} className="facebook">Login with facebook</a> */}
+
+                    <FacebookLogin className="facebook"
+                        appId='597030604753073'
+                        fields='name,email'
+                        scope='public_profile, email'
+                        callback={signUserIn}
+                    />
+                    <p><span>Don't have an account yet? <Link to='/reg'>Sign Up</Link></span></p>
+                    
                 </form>
                 </div>
             </div>
@@ -122,18 +147,6 @@ input[type=submit] {
 input[type=submit]:hover {
     background-color: #010334;
     transition:0.3s ease-in-out;
-}
-
-.facebook{  
-    background-color: #3d5d8e;
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid black;
-    border-radius: 4px;
-    box-sizing: border-box;
-    text-decoration:none;
 }
 
 `

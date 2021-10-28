@@ -58,7 +58,7 @@ function Favorite({className}) {
                                         axios.delete(`http://localhost:5000/api/routes/deleteFav/${item.id}/${item.user_id}`).then((res) => {
                                         Swal.fire(
                                             'Deleted!',
-                                            'Your file has been deleted.',
+                                            'Your song has been deleted.',
                                             'success',
                                             window.location.reload(true)
                                         )                                              
