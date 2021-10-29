@@ -15,6 +15,7 @@ function GooLogin(){
             email: res.profileObj.email
         }).then((res)=>{
             localStorage.setItem('user', JSON.stringify(res.data))
+            history.push('/home')
         })
     }
     const onFailure = (res) => {

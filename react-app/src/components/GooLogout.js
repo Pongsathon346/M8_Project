@@ -9,7 +9,7 @@ function GooLogout(){
 
     return(
         <div>
-            <GoogleLogout
+            <GoogleLogout style={{display:'none'}}
                 clientId={clientId}
                 buttonText="Logout"
                 onLogoutSuccess={onSuccess}
