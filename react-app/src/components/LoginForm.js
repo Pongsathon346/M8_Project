@@ -46,7 +46,7 @@ function LoginForm({className}) {
     
         const res = await axios({
           method: 'post',
-          url: 'http://localhost:5000/api/auth/signin/facebook',
+          url: 'http://localhost:5000/api/routes/signin/facebook',
           data: {
             user
           }
@@ -68,7 +68,6 @@ function LoginForm({className}) {
                     <input type="password" id="fname"  placeholder="Password" value={password} onChange={(event) => { setPassword(event.target.value)}} />
                     <input type="submit" value="Sign in" onClick={onClick} />
                     {/* <a href="http://localhost:5000/api/auth/facebook" style={{color:'white'}} className="facebook">Login with facebook</a> */}
-
                     <FacebookLogin className="facebook"
                         appId='597030604753073'
                         fields='name,email'
@@ -98,7 +97,7 @@ export default styled(LoginForm)`
   text-align:center;
   position: fixed;
   width: 30%;
-  bottom:40%;
+  bottom:35%;
 }
 
 .wel{

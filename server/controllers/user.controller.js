@@ -99,34 +99,44 @@ exports.login = function(req, res) {
             })
         }
 
-        // if(verify){
-        //     const sqlCheck = "SELECT * FROM user WHERE user_name = ? OR user_email = ? LIMIT 1"
-        //     database.query(sqlCheck, [name, email], (err, result) => {
-        //         if(err){
-        //             throw err
-        //         }else {
-        //             if(result.length == 0){
-        //                 const sql = "INSERT INTO user (user_name, user_email) VALUES (?,?)"
-        //                 database.query(sql, [resulted.name, resulted.email], (err, result)=>{
-        //                     if(err){
-        //                         throw err 
-        //                     }else {
-        //                         const token = jwt.sign({name, email},'userAccount')
-        //                         console.log('token',token);
-        //                         return res.status(200).json({token, name, email})
-        //                     }
-        //                 })
-        //             }else {
-        //                 const token = jwt.sign({name, email},'userAccount')
-        //                     return res.status(200).json({token, name, email})
-        //             }
-        //         }
-        //     })
-        // }else {
-        //     return res.status(400).send('error')
-        // }
         
-      } catch (error) {}
+        
+      } catch (error) {
+          return res.status(400).json({message:'Error!'})
+      }
+}
+
+exports.google = function(req, res) {
+    const username = req.body.name
+    const email = req.body.email
+    const sqlCheck = "SELECT * FROM user WHERE user_name = ? OR user_email = ? LIMIT 1"
+    database.query(sqlCheck, [username, email], async (err, result) => {
+        if(err){
+            throw err
+        }
+        if(result.length == 0){
+                const sql = "INSERT INTO user (user_name, user_email) VALUES (?,?)"
+                database.query(sql,[username, email], async (err, result2) => {
+                    if(err){
+                        throw err
+                    }else {
+                        database.query(sqlCheck, [username, email], (err, result3) => {
+                            if(err){
+                                throw err
+                            }else {
+                                const id = result3[0].user_id
+                                const token = jwt.sign({username, email},'userAccount')
+                                return res.status(200).json({token, username, email, id})
+                            }
+                        })
+                    }
+                })
+        }else{
+            const id = result[0].user_id
+            const token = jwt.sign({username, email},'userAccount')
+            return res.status(200).json({token, username, email, id})
+        }
+    })
 }
 
 // exports.loginFacebook = function(req, res) {

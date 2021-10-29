@@ -97,7 +97,6 @@ function Home({className}) {
                                                 </Row>
                                                 <Row>
                                                     <span className="head">Album : <span className="text">{item.album.title}</span></span>
-                                                    
                                                 </Row>
                                                 <Row>
                                                     <span className="head">Artist: <span className="text">{item.artist.name}</span></span> 

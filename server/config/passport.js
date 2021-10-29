@@ -2,7 +2,7 @@ const passport = require('passport')
 const BasicStrategy = require('passport-http').BasicStrategy
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
-const FacebookStrategy = require('passport-facebook').Strategy;
+// const FacebookStrategy = require('passport-facebook').Strategy;
 const bcrypt = require('bcrypt')
 const connect = require('../config/database')
 
