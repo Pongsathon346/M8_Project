@@ -5,13 +5,14 @@ import axios from 'axios'
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login'
-
+import GoogleLogin from './GooLogin';
+// import GoogleLogout from './GooLogout';
 
 function LoginForm({className}) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const history = useHistory()
-    
+
     function onClick(e) {
         e.preventDefault();
         axios.post('http://localhost:5000/api/routes/login', {}, {
@@ -74,8 +75,8 @@ function LoginForm({className}) {
                         scope='public_profile, email'
                         callback={signUserIn}
                     />
+                    <GoogleLogin />
                     <p><span>Don't have an account yet? <Link to='/reg'>Sign Up</Link></span></p>
-                    
                 </form>
                 </div>
             </div>

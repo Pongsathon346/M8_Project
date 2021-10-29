@@ -10,6 +10,8 @@ const connect = require('../config/database')
 
 module.exports = () => {
 
+    passport.use(passport.initialize())
+
     passport.use(new BasicStrategy((username, password, done) => {
         const sql = "SELECT * FROM user WHERE user_name = ? LIMIT 1"
         connect.query(sql, [username], (err, result) => {
@@ -53,11 +55,15 @@ module.exports = () => {
 //     )
 // );
 
-// passport.use(new JwtStrategy({
-//     jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(),
-//     secretOrKey = 'userAccount',
-// }, (payload, done) => {
-
-// }));
+passport.use(new JwtStrategy({
+    jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey : 'userAccount',
+}, (payload, done) => {
+    if(!payload){
+        done(null, error)
+    }else{
+        done(null, payload)
+    }
+}));
 
 }

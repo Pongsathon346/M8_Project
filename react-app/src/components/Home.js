@@ -31,11 +31,13 @@ function Home({className}) {
     }
 
     let id;
+    let token
     let users = JSON.parse(localStorage.getItem('user'));
     if(users === null){
         history.push('/')
     }else{
        id = users.id
+       token = users.token
     }
 
     return(
@@ -66,7 +68,8 @@ function Home({className}) {
                                     album: item.album.title,
                                     artist: item.artist.name,
                                     preview: item.preview
-                                }).then((res) =>{ 
+                                }, {headers:{'Authorization':`Bearer ${token}`}}
+                                ).then((res) =>{ 
                                     Swal.fire(
                                         'Success!',
                                         `${res.data.message}`,

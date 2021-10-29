@@ -12,15 +12,22 @@ function Favorite({className}) {
     const history = useHistory()
 
     let id;
+    let token;
     let users = JSON.parse(localStorage.getItem('user'));
     if(users === null){
         history.push('/')
     }else{
        id = users.id
+       token = users.token
+       console.log('token',token);
     }
 
     useEffect(async () => {
-        await axios.get(`http://localhost:5000/api/routes/getFav/${id}`).then((res) => {
+        await axios.get(`http://localhost:5000/api/routes/getFav/${id}`,{
+            headers: {
+               'Authorization':`Bearer ${token}`
+            }
+        }).then((res) => {
                 setSong(res.data)
             }).catch((err)=> {
                 Swal.fire({
@@ -55,7 +62,11 @@ function Favorite({className}) {
                                     confirmButtonText: 'Yes, delete it!'
                                   }).then((result) => {
                                     if (result.isConfirmed) {
-                                        axios.delete(`http://localhost:5000/api/routes/deleteFav/${item.id}/${item.user_id}`).then((res) => {
+                                        axios.delete(`http://localhost:5000/api/routes/deleteFav/${item.id}/${item.user_id}`,{
+                                            headers: {
+                                                'Authorization':`Bearer ${token}`
+                                            }
+                                        }).then((res) => {
                                         Swal.fire(
                                             'Deleted!',
                                             'Your song has been deleted.',
@@ -79,7 +90,7 @@ function Favorite({className}) {
                                         <Link to={`/lyric/${item.song_artist}&${item.song_name}`}><img src={item.image}></img></Link>
                                         </Col>
                                         <Col>
-                                            <div className="">
+                                            <div className="box-card-detail">
                                                 <div className="card-detail">
                                                 <Row>                      
                                                     <span className="head">Song : <span className="text">{item.song_name}</span></span>

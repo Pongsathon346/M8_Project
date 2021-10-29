@@ -5,11 +5,13 @@ const app = express()
 const cors = require('cors')
 
 module.exports = () => {
+
     app.use(express.json())
     app.use(express.urlencoded({extended: false}))
     app.use(cors())
     passport()
     
+
     app.use('/api', test)
     
     const listen = (port) => {
