@@ -27,7 +27,7 @@ function LoginForm({className}) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Invalid username'
+                text: 'Invalid username or password'
             })
         });
     }

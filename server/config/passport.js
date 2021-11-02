@@ -55,15 +55,15 @@ module.exports = () => {
 //     )
 // );
 
-passport.use(new JwtStrategy({
-    jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey : 'userAccount',
-}, (payload, done) => {
-    if(!payload){
-        done(null, error)
-    }else{
-        done(null, payload)
-    }
-}));
+    passport.use(new JwtStrategy({
+        jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey : 'userAccount',
+    }, (payload, done) => {
+        if(!payload){
+            done(null, error)
+        }else{
+            done(null, payload)
+        }
+    }));
 
 }

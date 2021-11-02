@@ -21,6 +21,7 @@ It is a project that build for people who want to search song lyrics
 https://github.com/Pongsathon346/M8_Project.git
 ```
 2.Run application
+
 Frontend
 ```
 $ cd react-app
@@ -35,8 +36,14 @@ $ node index
 ```
 
 ## API 
-1.Facebook Login
-2.Google Login 
+1.Facebook Login https://developers.facebook.com/
+2.Google Login  https://console.cloud.google.com/
+3.Get Song https://api.lyrics.ovh/suggest/:name
+4.Get Lyric https://api.lyrics.ovh/v1/:artistname/:songname 
+
+## Authentication
+-Passport-JWT
+A Passport strategy for authenticating with a JSON Web Token.This module lets you authenticate endpoints using a JSON web token. It is intended to be used to secure RESTful endpoints without sessions.
 
 ## Contact
 - Email:Pongsathon_j@cmu.ac.th
