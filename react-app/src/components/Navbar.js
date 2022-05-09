@@ -1,53 +1,52 @@
 import styled from 'styled-components'
-import {useHistory} from 'react-router'
+import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
-import Swal from 'sweetalert2';
-import Googleout from './GooLogout';
+import Swal from 'sweetalert2'
 
-function Navbar ({className}) {
-    const history = useHistory()
-    let name;
-    let users = JSON.parse(localStorage.getItem('user'));
-    if(users === null){
-        history.push('/')
-    }else{
-       name = users.username
-    }
+function Navbar ({ className }) {
+  const history = useHistory()
+  let name
+  const users = JSON.parse(localStorage.getItem('user'))
+  if (users === null) {
+    history.push('/')
+  } else {
+    name = users.username
+  }
 
-    function logout() {
-        Swal.fire({
-            title: 'Are you sure?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Logout!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire(
-                'Logout!',
-                'Your account has been logout.',
-                'success',
-                localStorage.clear(),
-                history.push('/')
-              )
-            }
-          })
-    }
+  function logout () {
+    Swal.fire({
+      title: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Logout!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          'Logout!',
+          'Your account has been logout.',
+          'success',
+          localStorage.clear(),
+          history.push('/')
+        )
+      }
+    })
+  }
 
-    return(
+  return (
         <div className={className}>
             <div className="nav-box">
                 <label className="logo">MLyric</label>
                 <div className="nav-box-right">
-                    <Link to="/home" className="home" style={{textDecoration:'none'}}>Home</Link>
-                    <Link to="/fav" className="fav" style={{textDecoration:'none'}}>Favorite</Link>
+                    <Link to="/home" className="home" style={{ textDecoration: 'none' }}>Home</Link>
+                    <Link to="/fav" className="fav" style={{ textDecoration: 'none' }}>Favorite</Link>
                     <label className="username">{name}</label>
                     <button className="logout" onClick={logout}>Logout</button>
                 </div>
             </div>
         </div>
-    )
+  )
 }
 
 export default styled(Navbar)`   
@@ -117,4 +116,4 @@ export default styled(Navbar)`
         border-radius:20px;
         
     }
-`;
+`

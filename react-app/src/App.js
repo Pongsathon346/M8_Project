@@ -1,13 +1,12 @@
-import { Switch, Route} from 'react-router-dom'
-import Homepage from './Pages/Homepage';
+import { Switch, Route } from 'react-router-dom'
+import Homepage from './Pages/Homepage'
 import Loginpage from './Pages/Loginpage'
-import Regpage from './Pages/Regpage';
-import Favpage from './Pages/Favpage';
-import Lyricpage from './Pages/Lyricpage';
+import Regpage from './Pages/Regpage'
+import Favpage from './Pages/Favpage'
+import Lyricpage from './Pages/Lyricpage'
 
-
-function App() {
-  return(
+function App () {
+  return (
     <Switch>
       <Route path="/lyric/:artist&:song">
         <Lyricpage />
@@ -28,4 +27,4 @@ function App() {
   )
 }
 
-export default App;
+export default App

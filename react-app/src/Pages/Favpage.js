@@ -1,13 +1,13 @@
-import Navbar from "../components/Navbar";
-import Favorite from "../components/Favorite";
+import Navbar from '../components/Navbar'
+import Favorite from '../components/Favorite'
 
-function Favpage() {
-    return(
+function Favpage () {
+  return (
         <div>
             <Navbar />
             <Favorite />
         </div>
-    )
+  )
 }
 
-export default Favpage;
+export default Favpage

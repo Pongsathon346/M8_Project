@@ -1,31 +1,25 @@
-import axios from "axios"
-import styled from "styled-components"
-import { useParams, useHistory } from "react-router"
-import {useState, useEffect} from 'react'
+import axios from 'axios'
+import styled from 'styled-components'
+import { useParams } from 'react-router'
+import { useState, useEffect } from 'react'
 
+function Lyric ({ className }) {
+  const { artist, song } = useParams()
+  const [lyric, setLyric] = useState('')
+  console.log('artist', artist)
+  console.log('song', song)
 
-function Lyric ({className}) {
-    const {artist,song} = useParams()
-    const history = useHistory()   
-    const [lyric, setLyric] = useState('')
-    console.log('artist', artist);
-    console.log('song', song);
+  useEffect(() => {
+    async function getMusic () {
+      const music = await axios(`https://api.lyrics.ovh/v1/${artist}/${song}`)
+      await setLyric(music.data.lyrics)
+      // await setLyric(music.data.lyrics.replace(/(?:\\[rn]|[\r\n]+)+/g, "<br>"))
+    }
 
-    useEffect(()  => {
-        async function getMusic() {
-            const music = await axios(`https://api.lyrics.ovh/v1/${artist}/${song}`)
-            await setLyric(music.data.lyrics)
-            // await setLyric(music.data.lyrics.replace(/(?:\\[rn]|[\r\n]+)+/g, "<br>"))
-            
-    
-        } 
+    getMusic()
+  }, [])
 
-        getMusic()
-
-    }, [])
-    
-
-    return(
+  return (
         <div className={className}>
             <div className="topic">
                 Lyric Detail
@@ -43,8 +37,7 @@ function Lyric ({className}) {
                 </div>
             </div>
         </div>
-    )
-
+  )
 }
 
 export default styled(Lyric)`

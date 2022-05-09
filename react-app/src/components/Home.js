@@ -1,52 +1,51 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from 'react'
 import axios from 'axios'
-import styled from "styled-components"
-import {Row, Col} from 'react-bootstrap'
-import { Link } from "react-router-dom"
-import {useHistory} from 'react-router'
-import Swal from 'sweetalert2';
+import styled from 'styled-components'
+import { Row, Col } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router'
+import Swal from 'sweetalert2'
 
+function Home ({ className }) {
+  const [input, setInput] = useState('')
+  const [search, setSearch] = useState('')
+  const [music, setMusic] = useState([])
+  const history = useHistory()
 
-function Home({className}) {
-    const [input, setInput] = useState('')
-    const [search, setSearch] = useState('')
-    const [music, setMusic] = useState([])
-    const history = useHistory()
-
-    useEffect(()=> {
-        if(search){
-            axios.get(`https://api.lyrics.ovh/suggest/${input}`).then((res) => {
-                setMusic(res.data.data)             
-            })
-        }else {
-            axios.get('https://api.lyrics.ovh/suggest/ed').then((res) => {
-                setMusic(res.data.data)       
-            })
-        }
-        console.log(music);
-    },[search])
-
-    function submit() {
-        setSearch(input)
+  useEffect(() => {
+    if (search) {
+      axios.get(`https://api.lyrics.ovh/suggest/${input}`).then((res) => {
+        setMusic(res.data.data)
+      })
+    } else {
+      axios.get('https://api.lyrics.ovh/suggest/ed').then((res) => {
+        setMusic(res.data.data)
+      })
     }
+    console.log(music)
+  }, [search])
 
-    let id;
-    let token
-    let users = JSON.parse(localStorage.getItem('user'));
-    if(users === null){
-        history.push('/')
-    }else{
-       id = users.id
-       token = users.token
-    }
+  function submit () {
+    setSearch(input)
+  }
 
-    return(
+  let id
+  let token
+  const users = JSON.parse(localStorage.getItem('user'))
+  if (users === null) {
+    history.push('/')
+  } else {
+    id = users.id
+    token = users.token
+  }
+
+  return (
         <div className={className}>
             <div className="container1">
                <div className="container-box">
                     <label className="search">Looking for song lyrics</label>
                     <div>
-                        <input type="text" placeholder="Search Artist or Song . . . ." name="searchBox" onChange={(event)=> setInput(event.target.value)}></input>
+                        <input type="text" placeholder="Search Artist or Song . . . ." name="searchBox" onChange={(event) => setInput(event.target.value)}></input>
                     </div>
                     <div>
                         <button type="submit" value="submit" onClick={submit}>search</button>
@@ -55,35 +54,35 @@ function Home({className}) {
             </div>
             <div className="container2">
                 <Row className="rowtest">
-                <Col md={2}></Col>   
+                <Col md={2}></Col>
                 <Col md={9} className="container2-box">
                     <Row>
                         {music.map((item) => {
-                            function sendFav(e) {
-                                e.preventDefault()
-                                axios.post('http://localhost:5000/api/routes/addFav',{
-                                    id: id,
-                                    image: item.album.cover_medium,
-                                    name: item.title,
-                                    album: item.album.title,
-                                    artist: item.artist.name,
-                                    preview: item.preview
-                                }, {headers:{'Authorization':`Bearer ${token}`}}
-                                ).then((res) =>{ 
-                                    Swal.fire(
-                                        'Success!',
+                          function sendFav (e) {
+                            e.preventDefault()
+                            axios.post('http://localhost:5000/api/routes/addFav', {
+                              id,
+                              image: item.album.cover_medium,
+                              name: item.title,
+                              album: item.album.title,
+                              artist: item.artist.name,
+                              preview: item.preview
+                            }, { headers: { Authorization: `Bearer ${token}` } }
+                            ).then((res) => {
+                              Swal.fire(
+                                'Success!',
                                         `${res.data.message}`,
                                         'success'
-                                      )
-                                }).catch((err) =>{
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Oops...',
-                                        text: `${err.response.data.message}`,
-                                      })
-                                })
-                            }
-                            return(
+                              )
+                            }).catch((err) => {
+                              Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: `${err.response.data.message}`
+                              })
+                            })
+                          }
+                          return (
                                 <Col md={6} key={item.id} className="box">
                                     <Row>
                                         <Col>
@@ -92,38 +91,38 @@ function Home({className}) {
                                         <Col>
                                             <div className="">
                                                 <div className="card-detail">
-                                                <Row>                      
+                                                <Row>
                                                     <span className="head">Song : <span className="text">{item.title}</span></span>
                                                 </Row>
                                                 <Row>
                                                     <span className="head">Album : <span className="text">{item.album.title}</span></span>
                                                 </Row>
                                                 <Row>
-                                                    <span className="head">Artist: <span className="text">{item.artist.name}</span></span> 
+                                                    <span className="head">Artist: <span className="text">{item.artist.name}</span></span>
                                                 </Row>
                                                 <Row>
-                                                    <span className="head">Preview : <a className="text" href={item.preview} style={{textDecoration:'none'}}>Listen!</a> </span>
+                                                    <span className="head">Preview : <a className="text" href={item.preview} style={{ textDecoration: 'none' }}>Listen!</a> </span>
                                                 </Row>
                                                 </div>
                                                 <Row>
-                                                    
+
                                                 </Row>
                                                 <Row>
-                                                    <button className="fav"  onClick={sendFav}>Add</button>
+                                                    <button className="fav" onClick={sendFav}>Add</button>
                                                     <Link to={`/lyric/${item.artist.name}&${item.title}`}><button className="lyric">Get Lyric</button></Link>
                                                 </Row>
                                             </div>
                                         </Col>
                                     </Row>
                                 </Col>
-                            )
+                          )
                         })}
                     </Row>
                 </Col>
                 </Row>
             </div>
         </div>
-    )
+  )
 }
 
 export default styled(Home)`
