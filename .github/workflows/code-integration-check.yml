@@ -25,7 +25,7 @@ jobs:
             ./${{ matrix.dir }}/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: install and build dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --cwd ./${{ matrix.dir }}
 
   lint:
     needs: install
@@ -45,10 +45,10 @@ jobs:
             ./${{ matrix.dir }}/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: install
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --cwd ./${{ matrix.dir }}
       - name: Run test
         run: |
-          yarn eslint ./src
+          yarn eslint ./src --cwd ./${{ matrix.dir }}
 
   test:
     needs: install
@@ -68,7 +68,7 @@ jobs:
             ./${{ matrix.dir }}/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock')}}
       - name: install and build dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile --cwd ./${{ matrix.dir }}
       - name: Run test
         run: |
-          yarn test --passWithNoTests
+          yarn test --passWithNoTests --cwd ./${{ matrix.dir }}
