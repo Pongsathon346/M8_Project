@@ -8,8 +8,10 @@ on:
     - "master"
 
 jobs:
-  frontend-install:
+  install:
     runs-on: ubuntu-latest
+    strategy:
+      matrix: { dir: ['react-app', 'server'] }
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16
@@ -20,14 +22,16 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ./react-app/node_modules
+            ./${{ matrix.dir }}/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: install and build dependencies
         run: yarn install --frozen-lockfile
 
-  frontend-lint:
-    needs: frontend-install
+  lint:
+    needs: install
     runs-on: ubuntu-latest
+    strategy:
+      matrix: { dir: ['some-dir', 'other-dir'] }
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16
@@ -38,16 +42,19 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ./react-app/node_modules
+            ./${{ matrix.dir }}/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: install
         run: yarn install --frozen-lockfile
       - name: Run test
         run: |
           yarn eslint ./src
 
-  frontend-test:
-    needs: frontend-install
+  test:
+    needs: install
     runs-on: ubuntu-latest
+    strategy:
+      matrix: { dir: ['some-dir', 'other-dir'] }
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16
@@ -58,70 +65,10 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ./server/node_modules
+            ./${{ matrix.dir }}/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock')}}
       - name: install and build dependencies
         run: yarn install --frozen-lockfile
       - name: Run test
         run: |
           yarn test --passWithNoTests
-
-  backend-install:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 16
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-    - name: Cache node_modules
-      uses: actions/cache@v2
-      with:
-        path: |
-          ./server/node_modules
-        key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-    - name: install and build dependencies
-      run: yarn install --frozen-lockfile
-
-  backend-lint:
-    needs: backend-install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 16
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - name: Cache node_modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            ./server/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-      - name: install
-        run: yarn install --frozen-lockfile
-      - name: Run test
-        run: |
-          yarn eslint ./config ./controllers ./routes
-  
-  backend-test:
-    needs: backend-install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 16
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - name: Cache node_modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            ./server/node_modules
-          ket: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-      - name: install and build dependencies
-        run: yarn install --frozen-lockfile
-      - name: Run test
-        run: |
-          yarn test --passWithNoTests
-
