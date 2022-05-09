@@ -31,7 +31,7 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     strategy:
-      matrix: { dir: ['react-app', 'server'] }
+      matrix: { dir: ['./react-app/src', './server/config ./server/controllers ./server/routes'] }
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16
@@ -48,13 +48,13 @@ jobs:
         run: yarn install --frozen-lockfile --cwd ./${{ matrix.dir }}
       - name: Run test
         run: |
-          yarn eslint ./src --cwd ./${{ matrix.dir }}
+          yarn eslint ${{ matrix.dir }}
 
   test:
     needs: install
     runs-on: ubuntu-latest
     strategy:
-      matrix: { dir: ['react-app', 'server'] }
+      matrix: { dir: ['./react-app/src', './server'] }
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16
@@ -71,4 +71,4 @@ jobs:
         run: yarn install --frozen-lockfile --cwd ./${{ matrix.dir }}
       - name: Run test
         run: |
-          yarn test --passWithNoTests --cwd ./${{ matrix.dir }}
+          yarn test ${{ matrix.dir }} --passWithNoTests 
