@@ -40,10 +40,6 @@ jobs:
           path: |
             ./react-app/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-      - name: install
-        with:
-          path: |
-            ./react-app
         run: yarn install --frozen-lockfile
       - name: Run test
         run: |
