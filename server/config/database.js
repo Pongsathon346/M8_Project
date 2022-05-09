@@ -1,9 +1,9 @@
-const mysql = require('mysql2')
+const pg = require('pg')
 
-const connect = mysql.createConnection({
+const connect = pg.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: '',
+  user: 'postgres',
+  password: '1q2w3e',
   database: 'lyric_database'
 })
 
