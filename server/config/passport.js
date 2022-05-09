@@ -6,64 +6,40 @@ const ExtractJwt = require('passport-jwt').ExtractJwt
 const bcrypt = require('bcrypt')
 const connect = require('../config/database')
 
-
-
 module.exports = () => {
+  passport.use(passport.initialize())
 
-    passport.use(passport.initialize())
+  passport.use(new BasicStrategy((username, password, done) => {
+    const sql = 'SELECT * FROM user WHERE user_name = ? LIMIT 1'
+    connect.query(sql, [username], (err, result) => {
+      if (err) throw err
 
-    passport.use(new BasicStrategy((username, password, done) => {
-        const sql = "SELECT * FROM user WHERE user_name = ? LIMIT 1"
-        connect.query(sql, [username], (err, result) => {
-            if(err) throw err
-    
-            if(result.length === 0){
-                done(null, false);
-            }else {
-                const userPassword = result[0].user_password;
-                if(!bcrypt.compareSync(password, userPassword)){
-                    return done(null, {
-                        error: true
-                    })
-                }else {
-                    done(null, {
-                        id: result[0].user_id,
-                        username: result[0].user_name
-                    })
-                }
-            }
-        })
-    }));
-
-//     passport.use(new FacebookStrategy({
-//         clientID: "597030604753073",
-//         clientSecret: "59c05e2dee7f790458d69a8cd8eaebf3",
-//         callbackURL: "http://localhost:5000/api/auth/facebook/callback",
-//         profileFields: ['id', 'displayName', 'name', 'email'],
-//         passReqToCallback: true,
-//       },
-//       function(req, accessToken, refreshToken, profile, done) {
-//         try {
-//             if (profile) {
-//                 req.user = profile
-//                 done(null, profile)
-//             }
-//         } catch (error) {
-//             done(error)
-//         }
-//       }
-//     )
-// );
-
-    passport.use(new JwtStrategy({
-        jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey : 'userAccount',
-    }, (payload, done) => {
-        if(!payload){
-            done(null, error)
-        }else{
-            done(null, payload)
+      if (result.length === 0) {
+        done(null, false)
+      } else {
+        const userPassword = result[0].user_password
+        if (!bcrypt.compareSync(password, userPassword)) {
+          return done(null, {
+            error: true
+          })
+        } else {
+          done(null, {
+            id: result[0].user_id,
+            username: result[0].user_name
+          })
         }
-    }));
+      }
+    })
+  }))
 
+  passport.use(new JwtStrategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: 'userAccount'
+  }, (payload, done) => {
+    if (!payload) {
+      done(null)
+    } else {
+      done(null, payload)
+    }
+  }))
 }
