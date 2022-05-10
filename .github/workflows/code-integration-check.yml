@@ -27,11 +27,9 @@ jobs:
       - name: install and build dependencies
         run: yarn install --frozen-lockfile --cwd ./${{ matrix.dir }}
 
-  lint:
+  f-lint:
     needs: install
     runs-on: ubuntu-latest
-    strategy:
-      matrix: { dir: ['react-app', 'server'], paths: ['./react-app/src', './server/config ./server/controllers ./server/routes'] }
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16
@@ -42,19 +40,17 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ./${{ matrix.dir }}/node_modules
+            ./react-app/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: install
-        run: yarn install --frozen-lockfile --cwd ./${{ matrix.dir }}
+        run: yarn install --frozen-lockfile --cwd ./react-app
       - name: Run test
         run: |
-          yarn eslint ${{ matrix.paths }}
+          yarn eslint ./react-app
 
-  test:
+  b-lint:
     needs: install
     runs-on: ubuntu-latest
-    strategy:
-      matrix: { dir: ['react-app', 'server'], paths: ['./react-app/src', './server'] }
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16
@@ -65,10 +61,52 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ./${{ matrix.dir }}/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock')}}
-      - name: install and build dependencies
-        run: yarn install --frozen-lockfile --cwd ./${{ matrix.dir }}
+            ./server/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: install
+        run: yarn install --frozen-lockfile --cwd ./server
       - name: Run test
         run: |
-          yarn test --cwd ${{ matrix.dir }} --passWithNoTests 
+          yarn eslint ./server/config ./server/controllers ./server/routes
+
+  f-test:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./react-app/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock')}}
+      - name: install and build dependencies
+        run: yarn install --frozen-lockfile --cwd ./react-app
+      - name: Run test
+        run: |
+          yarn test --cwd ./react-app/src --passWithNoTests 
+
+  b-test:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./server/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+      - name: install and build dependencies
+        run: yarn install --frozen-lockfile --cwd ./server
+      - name: Run test
+        run: |
+          yarn test --cwd ./server --passWithNoTests
