@@ -110,6 +110,3 @@ jobs:
       - name: Run test
         run: |
           yarn test --passWithNoTests
-        with:
-          path: |
-            ./server
