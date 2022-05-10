@@ -67,7 +67,7 @@ jobs:
         run: yarn install --frozen-lockfile --cwd ./server
       - name: Run test
         run: |
-          yarn eslint ./server/config ./server/controllers ./server/routes
+          yarn eslint --cwd ./server
 
   f-test:
     needs: install
@@ -108,5 +108,8 @@ jobs:
       - name: install and build dependencies
         run: yarn install --frozen-lockfile --cwd ./server
       - name: Run test
+        with:
+          path: |
+            ./server
         run: |
           yarn test --cwd ./server --passWithNoTests
