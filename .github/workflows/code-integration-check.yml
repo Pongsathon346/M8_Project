@@ -28,6 +28,7 @@ jobs:
         run: yarn install --frozen-lockfile --cwd ./${{ matrix.dir }}
 
   f-lint:
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -36,6 +37,7 @@ jobs:
           files: react-app/src/
 
   b-lint:
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
