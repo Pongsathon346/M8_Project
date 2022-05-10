@@ -108,8 +108,8 @@ jobs:
       - name: install and build dependencies
         run: yarn install --frozen-lockfile --cwd ./server
       - name: Run test
+        run: |
+          yarn test --passWithNoTests
         with:
           path: |
             ./server
-        run: |
-          yarn test --cwd ./server --passWithNoTests
