@@ -69,7 +69,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Run test
         working-directory: ./server
-        run: yarn eslint --cwd
+        run: yarn eslint
 
   f-test:
     needs: install
